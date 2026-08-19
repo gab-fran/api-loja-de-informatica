@@ -2,6 +2,9 @@
 // Request e Response são os tipos que representam a requisição e a resposta HTTP
 import { Router, type Request, type Response } from "express";
 
+import CategoriaController from "./controller/CategoriaController.js";
+import ProdutoController from "./controller/ProdutoController.js";
+
 // Cria uma instância do Router — é neste objeto que todas as rotas serão registradas
 // O router é depois exportado e conectado ao servidor principal (geralmente no app.ts ou server.ts)
 const router = Router();
@@ -18,6 +21,21 @@ router.get('/', (req: Request, res: Response) => {
         // Isso ajuda a confirmar não só que está no ar, mas também quando foi acessado
         .json({ mensagem: "Aplicação online", timestamp: new Date() });
 });
+
+router.get('/categoria', CategoriaController.todos);
+router.get('/categoria/:id', CategoriaController.categoria);
+router.post('/categoria', CategoriaController.cadastrar);
+router.put('/categoria/:id', CategoriaController.atualizar); 
+
+router.get('/produto', ProdutoController.todos);
+router.get('/produto/:id', ProdutoController.produto);
+router.post('/produto', ProdutoController.cadastrar);
+router.put('/produto/:id', ProdutoController.atualizar);
+router.delete('/produto/:id', ProdutoController.remover);
+router.get('/produto-valor-por-produto', ProdutoController.valorPorProduto);
+router.get('/produto-valor-total-estoque', ProdutoController.valorTotalEstoque);
+router.get('/produto-produtos-para-reposicao', ProdutoController.produtosParaReposicao);
+
 
 // Exporta o router para que possa ser registrado no servidor principal da aplicação
 // O uso de "export { router }" (exportação nomeada) ao invés de "export default" permite
