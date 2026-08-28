@@ -43,15 +43,15 @@ class ProdutoController extends Produto {
             const dadosRecebidos: ProdutoDTO = req.body;
 
             const novaProduto = new Produto(
-                dadosRecebidos.id_categoria,
+                dadosRecebidos.idCategoria,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",
-                dadosRecebidos.preco_unitario,
-                dadosRecebidos.quantidade_disponivel,
-                dadosRecebidos.quantidade_minima,
+                dadosRecebidos.precoUnitario,
+                dadosRecebidos.quantidadeDisponivel,
+                dadosRecebidos.quantidadeMinima,
                 dadosRecebidos.ativo ?? true,
-                dadosRecebidos.data_cadastro ?? new Date()
+                dadosRecebidos.dataCadastro ?? new Date()
             );
 
             const result = await Produto.cadastrarProduto(novaProduto);
@@ -72,15 +72,15 @@ class ProdutoController extends Produto {
             const dadosRecebidos: ProdutoDTO = req.body;
 
             const produto = new Produto(
-                dadosRecebidos.id_categoria,
+                dadosRecebidos.idCategoria,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",
-                dadosRecebidos.preco_unitario,
-                dadosRecebidos.quantidade_disponivel,
-                dadosRecebidos.quantidade_minima,
+                dadosRecebidos.precoUnitario,
+                dadosRecebidos.quantidadeDisponivel,
+                dadosRecebidos.quantidadeMinima,
                 dadosRecebidos.ativo ?? true,
-                dadosRecebidos.data_cadastro ?? new Date()
+                dadosRecebidos.dataCadastro ?? new Date()
             );
 
 

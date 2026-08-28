@@ -5,7 +5,7 @@ import { DatabaseModel } from "./DatabaseModel.js";
 const database = new DatabaseModel().pool;
 
 class Categoria {
-    private id_categoria: number = 0;
+    private idCategoria: number = 0;
     private nome: string;
 
     constructor(_nome: string) {
@@ -15,11 +15,11 @@ class Categoria {
     // ==================== GETTERS E SETTERS ====================
 
     public setIdCategoria(_id_categoria: number): void {
-        this.id_categoria = _id_categoria;
+        this.idCategoria = _id_categoria;
     }
 
     public getIdCategoria(): number {
-        return this.id_categoria;
+        return this.idCategoria;
     }
 
     public getNome(): string {
@@ -42,7 +42,7 @@ class Categoria {
             respostaBD.rows.forEach((categoria: any) => {
 
                 const categoriaDTO: CategoriaDTO = {
-                    id_categoria: categoria.id_categoria,
+                    idCategoria: categoria.id_categoria,
                     nome: categoria.nome
                 };
 
@@ -62,7 +62,7 @@ class Categoria {
             const respostaBD = await database.query(querySelectCategoria, [id_categoria]);
 
             const categoriaDTO: CategoriaDTO = {
-                id_categoria: respostaBD.rows[0].id_categoria,
+                idCategoria: respostaBD.rows[0].id_categoria,
                 nome: respostaBD.rows[0].nome
             };
 
@@ -73,9 +73,9 @@ class Categoria {
         }
     }
 
-     static async cadastrarCategoria(categoria: Categoria): Promise<boolean> {
+    static async cadastrarCategoria(categoria: Categoria): Promise<boolean> {
         try {
-           
+
             const queryInsertCategoria = `INSERT INTO categoria (nome)
                                 VALUES ($1) RETURNING id_categoria;`;
 
@@ -95,22 +95,22 @@ class Categoria {
 
     static async atualizarCategoria(categoria: Categoria): Promise<boolean> {
         try {
-            const categoriaConsulta: CategoriaDTO | null = await this.listarCategoria(categoria.id_categoria);
+            const categoriaConsulta: CategoriaDTO | null = await this.listarCategoria(categoria.idCategoria);
 
             if (categoriaConsulta) {
-                
+
                 const queryAtualizarCategoria = `UPDATE categoria SET 
                                                     nome = $1                                            
                                                 WHERE id_categoria = $2`;
 
-                
+
                 const respostaBD = await database.query(queryAtualizarCategoria, [
                     categoria.getNome().toUpperCase(),       // Nome em maiúsculas
-                    categoria.id_categoria                           // ID da categoria (para o WHERE)
+                    categoria.idCategoria                           // ID da categoria (para o WHERE)
                 ]);
 
-                
-                
+
+
             }
 
             return true;

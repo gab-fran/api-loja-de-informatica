@@ -6,54 +6,54 @@ import { DatabaseModel } from "./DatabaseModel.js";
 const database = new DatabaseModel().pool;
 
 class Produto {
-    private id_produto: number = 0;
-    private id_categoria: number;
+    private idProduto: number = 0;
+    private idCategoria: number;
     private codigo: string;
     private nome: string;
     private descricao: string;
-    private preco_unitario: number;
-    private quantidade_disponivel: number;
-    private quantidade_minima: number
+    private precoUnitario: number;
+    private quantidadeDisponivel: number;
+    private quantidadeMinima: number
     private ativo: boolean;
-    private data_cadastro: Date;
+    private dataCadastro: Date;
 
     constructor(
-        _id_categoria: number,
+        _idCategoria: number,
         _codigo: string, _nome: string,
         _descricao: string,
-        _preco_unitario: number,
-        _quantidade_disponivel: number,
-        _quantidade_minima: number,
+        _precoUnitario: number,
+        _quantidadeDisponivel: number,
+        _quantidadeMinima: number,
         _ativo: boolean,
-        _data_cadastro: Date
+        _dataCadastro: Date
     ) {
-        this.id_categoria = _id_categoria;
+        this.idCategoria = _idCategoria;
         this.codigo = _codigo;
         this.nome = _nome;
         this.descricao = _descricao;
-        this.preco_unitario = _preco_unitario;
-        this.quantidade_disponivel = _quantidade_disponivel;
-        this.quantidade_minima = _quantidade_minima;
+        this.precoUnitario = _precoUnitario;
+        this.quantidadeDisponivel = _quantidadeDisponivel;
+        this.quantidadeMinima = _quantidadeMinima;
         this.ativo = _ativo;
-        this.data_cadastro = _data_cadastro;
+        this.dataCadastro = _dataCadastro;
     }
 
     // ==================== GETTERS E SETTERS ====================
 
     public getIdProduto(): number {
-        return this.id_produto;
+        return this.idProduto;
     }
 
-    public setIdProduto(_id_produto: number): void {
-        this.id_produto = _id_produto;
+    public setIdProduto(_idProduto: number): void {
+        this.idProduto = _idProduto;
     }
 
     public getIdCategoria(): number {
-        return this.id_categoria;
+        return this.idCategoria;
     }
 
-    public setIdCategoria(_id_categoria: number): void {
-        this.id_categoria = _id_categoria;
+    public setIdCategoria(_idCategoria: number): void {
+        this.idCategoria = _idCategoria;
     }
 
     public getCodigo(): string {
@@ -81,27 +81,27 @@ class Produto {
     }
 
     public getPrecoUnitario(): number {
-        return this.preco_unitario;
+        return this.precoUnitario;
     }
 
-    public setPrecoUnitario(_preco_unitario: number): void {
-        this.preco_unitario = _preco_unitario;
+    public setPrecoUnitario(_precoUnitario: number): void {
+        this.precoUnitario = _precoUnitario;
     }
 
     public getQuantidadeDisponivel(): number {
-        return this.quantidade_disponivel;
+        return this.quantidadeDisponivel;
     }
 
-    public setQuantidadeDisponivel(_quantidade_disponivel: number): void {
-        this.quantidade_disponivel = _quantidade_disponivel;
+    public setQuantidadeDisponivel(_quantidadeDisponivel: number): void {
+        this.quantidadeDisponivel = _quantidadeDisponivel;
     }
 
     public getQuantidadeMinima(): number {
-        return this.quantidade_minima;
+        return this.quantidadeMinima;
     }
 
-    public setQuantidadeMinima(_quantidade_minima: number): void {
-        this.quantidade_minima = _quantidade_minima;
+    public setQuantidadeMinima(_quantidadeMinima: number): void {
+        this.quantidadeMinima = _quantidadeMinima;
     }
 
     public isAtivo(): boolean {
@@ -113,11 +113,11 @@ class Produto {
     }
 
     public getDataCadastro(): Date {
-        return this.data_cadastro;
+        return this.dataCadastro;
     }
 
-    public setDataCadastro(_data_cadastro: Date): void {
-        this.data_cadastro = _data_cadastro;
+    public setDataCadastro(_dataCadastro: Date): void {
+        this.dataCadastro = _dataCadastro;
     }
 
     // ==================== MÉTODOS ESTÁTICOS (operações no banco de dados) ====================
@@ -132,16 +132,16 @@ class Produto {
             respostaBD.rows.forEach((produto: any) => {
 
                 const produtoDTO: ProdutoDTO = {
-                    id_produto: produto.id_produto,
-                    id_categoria: produto.id_categoria,
+                    idProduto: produto.id_produto,
+                    idCategoria: produto.id_categoria,
                     codigo: produto.codigo,
                     nome: produto.nome,
                     descricao: produto.descricao,
-                    preco_unitario: produto.preco_unitario,
-                    quantidade_disponivel: produto.quantidade_disponivel,
-                    quantidade_minima: produto.quantidade_minima,
+                    precoUnitario: produto.preco_unitario,
+                    quantidadeDisponivel: produto.quantidade_disponivel,
+                    quantidadeMinima: produto.quantidade_minima,
                     ativo: produto.ativo,
-                    data_cadastro: produto.data_cadastro
+                    dataCadastro: produto.data_cadastro
                 };
 
                 listaDeProdutos.push(produtoDTO);
@@ -160,16 +160,16 @@ class Produto {
             const respostaBD = await database.query(querySelectProduto, [id_produto]);
 
             const produtoDTO: ProdutoDTO = {
-                id_produto: respostaBD.rows[0].id_produto,
-                id_categoria: respostaBD.rows[0].id_categoria,
+                idProduto: respostaBD.rows[0].id_produto,
+                idCategoria: respostaBD.rows[0].id_categoria,
                 codigo: respostaBD.rows[0].codigo,
                 nome: respostaBD.rows[0].nome,
                 descricao: respostaBD.rows[0].descricao,
-                preco_unitario: respostaBD.rows[0].preco_unitario,
-                quantidade_disponivel: respostaBD.rows[0].quantidade_disponivel,
-                quantidade_minima: respostaBD.rows[0].quantidade_minima,
+                precoUnitario: respostaBD.rows[0].preco_unitario,
+                quantidadeDisponivel: respostaBD.rows[0].quantidade_disponivel,
+                quantidadeMinima: respostaBD.rows[0].quantidade_minima,
                 ativo: respostaBD.rows[0].ativo,
-                data_cadastro: respostaBD.rows[0].data_cadastro
+                dataCadastro: respostaBD.rows[0].data_cadastro
             };
 
             return produtoDTO;
@@ -295,7 +295,7 @@ class Produto {
             const query = 'SELECT * FROM vw_valor_total_estoque;';
             const { rows } = await database.query<ValorTotalEstoque>(query);
 
-            return Number(rows[0]?.valor_total_estoque ?? 0);
+            return Number(rows[0]?.valorTotalEstoque ?? 0);
         } catch (error) {
             console.error(`Erro ao buscar valor total do estoque: ${error}`);
             return 0;
