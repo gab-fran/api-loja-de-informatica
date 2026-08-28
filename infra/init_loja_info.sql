@@ -2,6 +2,7 @@ DROP VIEW IF EXISTS vw_valor_total_estoque;
 DROP VIEW IF EXISTS vw_valor_produto_estoque;
 DROP VIEW IF EXISTS vw_produtos_reposicao;
 DROP VIEW IF EXISTS vw_produtos_detalhes;
+DROP VIEW IF EXISTS vw_movimentacoes_detalhes;
 
 DROP TABLE IF EXISTS movimentacao;
 DROP TABLE IF EXISTS produto;
@@ -517,4 +518,37 @@ SELECT
     c.nome AS nome_categoria
 FROM produto AS p
 INNER JOIN categoria AS c 
+    ON p.id_categoria = c.id_categoria;
+
+CREATE OR REPLACE VIEW vw_movimentacoes_detalhes AS
+SELECT 
+    -- Dados da Movimentação
+    m.id_movimentacao,
+    m.id_movimentacao_origem,
+    m.data_movimentacao,
+    m.tipo AS tipo_movimentacao,
+    m.motivo,
+    m.quantidade AS quantidade_movimentada,
+    m.preco_unitario_praticado,
+    m.valor_total,
+    m.observacao,
+
+    -- Dados do Produto
+    p.id_produto,
+    p.codigo AS codigo_produto,
+    p.nome AS nome_produto,
+    p.descricao AS descricao_produto,
+    p.preco_unitario AS preco_cadastro_produto,
+    p.quantidade_disponivel AS estoque_atual,
+    p.quantidade_minima AS estoque_minimo,
+    p.ativo AS produto_ativo,
+
+    -- Dados da Categoria
+    c.id_categoria,
+    c.nome AS nome_categoria
+
+FROM movimentacao m
+INNER JOIN produto p 
+    ON m.id_produto = p.id_produto
+INNER JOIN categoria c 
     ON p.id_categoria = c.id_categoria;
