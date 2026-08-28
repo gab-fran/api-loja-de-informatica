@@ -1,6 +1,8 @@
+import type CategoriaDTO from "./CategoriaDTO.js";
+
 export default interface ProdutoDTO {
   idProduto?: number;
-  idCategoria: number;
+  categoria: CategoriaDTO;
   codigo: string;
   nome: string;
   descricao?: string;

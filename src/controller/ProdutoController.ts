@@ -43,7 +43,7 @@ class ProdutoController extends Produto {
             const dadosRecebidos: ProdutoDTO = req.body;
 
             const novaProduto = new Produto(
-                dadosRecebidos.idCategoria,
+                dadosRecebidos.categoria.idCategoria!,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",
@@ -72,7 +72,7 @@ class ProdutoController extends Produto {
             const dadosRecebidos: ProdutoDTO = req.body;
 
             const produto = new Produto(
-                dadosRecebidos.idCategoria,
+                dadosRecebidos.categoria.idCategoria!,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",

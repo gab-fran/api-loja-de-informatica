@@ -127,15 +127,18 @@ class Produto {
         let listaDeProdutos: Array<ProdutoDTO> = [];
 
         try {
-            const querySelectProduto = `SELECT * FROM produto WHERE ativo = true;`;
+            const querySelectProduto = `SELECT * FROM vw_produtos_detalhes WHERE ativo = true;`;
             const respostaBD = await database.query(querySelectProduto);
             respostaBD.rows.forEach((produto: any) => {
 
                 const produtoDTO: ProdutoDTO = {
                     idProduto: produto.id_produto,
-                    idCategoria: produto.id_categoria,
+                    categoria: {
+                        idCategoria: produto.id_categoria,
+                        nome: produto.nome_categoria
+                    },
                     codigo: produto.codigo,
-                    nome: produto.nome,
+                    nome: produto.nome_produto,
                     descricao: produto.descricao,
                     precoUnitario: produto.preco_unitario,
                     quantidadeDisponivel: produto.quantidade_disponivel,
@@ -156,14 +159,17 @@ class Produto {
 
     static async listarProduto(id_produto: number): Promise<ProdutoDTO | null> {
         try {
-            const querySelectProduto = `SELECT * FROM produto WHERE id_produto = $1`;
+            const querySelectProduto = `SELECT * FROM vw_produtos_detalhes WHERE id_produto = $1`;
             const respostaBD = await database.query(querySelectProduto, [id_produto]);
 
             const produtoDTO: ProdutoDTO = {
                 idProduto: respostaBD.rows[0].id_produto,
-                idCategoria: respostaBD.rows[0].id_categoria,
+                categoria: {
+                    idCategoria: respostaBD.rows[0].id_categoria,
+                    nome: respostaBD.rows[0].nome_categoria
+                },
                 codigo: respostaBD.rows[0].codigo,
-                nome: respostaBD.rows[0].nome,
+                nome: respostaBD.rows[0].nome_produto,
                 descricao: respostaBD.rows[0].descricao,
                 precoUnitario: respostaBD.rows[0].preco_unitario,
                 quantidadeDisponivel: respostaBD.rows[0].quantidade_disponivel,
