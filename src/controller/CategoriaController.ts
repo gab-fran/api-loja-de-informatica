@@ -3,6 +3,7 @@ import Categoria from "../model/Categoria.js";
 import { type Request, type Response } from "express";
 
 import type CategoriaDTO from "../dto/CategoriaDTO.js";
+import { validarCategoria, validarId } from "../validation/dados.js";
 
 class CategoriaController extends Categoria {
 
@@ -19,9 +20,9 @@ class CategoriaController extends Categoria {
     static async categoria(req: Request, res: Response) {
         try {
         
-            const idCategoria = parseInt(req.params.id as string);
+            const idCategoria = validarId(req.params.id);
 
-            if (isNaN(idCategoria)) {
+            if (idCategoria === null) {
                 return res.status(400).json({ mensagem: "ID inválido." });
             }
 
@@ -40,10 +41,13 @@ class CategoriaController extends Categoria {
 
     static async cadastrar(req: Request, res: Response) {
         try {
-            const dadosRecebidos: CategoriaDTO = req.body;
+            const validacao = validarCategoria(req.body);
+            if (!validacao.valido) {
+                return res.status(400).json({ mensagem: "Dados inválidos.", erros: validacao.erros });
+            }
 
             const novaCategoria = new Categoria(
-                dadosRecebidos.nome
+                validacao.dados.nome
             );
 
             const result = await Categoria.cadastrarCategoria(novaCategoria);
@@ -61,15 +65,18 @@ class CategoriaController extends Categoria {
 
     static async atualizar(req: Request, res: Response): Promise<Response> {
         try {
-            const dadosRecebidos: CategoriaDTO = req.body;
+            const validacao = validarCategoria(req.body);
+            if (!validacao.valido) {
+                return res.status(400).json({ mensagem: "Dados inválidos.", erros: validacao.erros });
+            }
 
             const categoria = new Categoria(
-                dadosRecebidos.nome
+                validacao.dados.nome
             );
               
 
-            const idCategoria = parseInt(req.params.id as string);
-            if (isNaN(idCategoria)) {
+            const idCategoria = validarId(req.params.id);
+            if (idCategoria === null) {
                 return res.status(400).json({ mensagem: "ID inválido." });
             }
             categoria.setIdCategoria(idCategoria);

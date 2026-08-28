@@ -3,6 +3,7 @@ import Produto from "../model/Produto.js";
 import { type Request, type Response } from "express";
 
 import type ProdutoDTO from "../dto/ProdutoDTO.js";
+import { validarId, validarProduto } from "../validation/dados.js";
 
 class ProdutoController extends Produto {
 
@@ -19,9 +20,9 @@ class ProdutoController extends Produto {
     static async produto(req: Request, res: Response) {
         try {
 
-            const idProduto = parseInt(req.params.id as string);
+            const idProduto = validarId(req.params.id);
 
-            if (isNaN(idProduto)) {
+            if (idProduto === null) {
                 return res.status(400).json({ mensagem: "ID inválido." });
             }
 
@@ -40,10 +41,14 @@ class ProdutoController extends Produto {
 
     static async cadastrar(req: Request, res: Response) {
         try {
-            const dadosRecebidos: ProdutoDTO = req.body;
+            const validacao = validarProduto(req.body);
+            if (!validacao.valido) {
+                return res.status(400).json({ mensagem: "Dados inválidos.", erros: validacao.erros });
+            }
+            const dadosRecebidos = validacao.dados;
 
             const novaProduto = new Produto(
-                dadosRecebidos.categoria.idCategoria!,
+                dadosRecebidos.idCategoria,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",
@@ -69,10 +74,14 @@ class ProdutoController extends Produto {
 
     static async atualizar(req: Request, res: Response): Promise<Response> {
         try {
-            const dadosRecebidos: ProdutoDTO = req.body;
+            const validacao = validarProduto(req.body);
+            if (!validacao.valido) {
+                return res.status(400).json({ mensagem: "Dados inválidos.", erros: validacao.erros });
+            }
+            const dadosRecebidos = validacao.dados;
 
             const produto = new Produto(
-                dadosRecebidos.categoria.idCategoria!,
+                dadosRecebidos.idCategoria,
                 dadosRecebidos.codigo,
                 dadosRecebidos.nome,
                 dadosRecebidos.descricao ?? "",
@@ -84,8 +93,8 @@ class ProdutoController extends Produto {
             );
 
 
-            const idProduto = parseInt(req.params.id as string);
-            if (isNaN(idProduto)) {
+            const idProduto = validarId(req.params.id);
+            if (idProduto === null) {
                 return res.status(400).json({ mensagem: "ID inválido." });
             }
             produto.setIdProduto(idProduto);
@@ -105,9 +114,9 @@ class ProdutoController extends Produto {
 
     static async remover(req: Request, res: Response): Promise<Response> {
         try {
-            const idProduto = parseInt(req.params.id as string);
+            const idProduto = validarId(req.params.id);
 
-            if (isNaN(idProduto)) {
+            if (idProduto === null) {
                 return res.status(400).json({ mensagem: "ID inválido." });
             }
 
