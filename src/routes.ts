@@ -4,6 +4,7 @@ import { Router, type Request, type Response } from "express";
 
 import CategoriaController from "./controller/CategoriaController.js";
 import ProdutoController from "./controller/ProdutoController.js";
+import MovimentacaoController from "./controller/MovimentacaoController.js";
 
 // Cria uma instância do Router — é neste objeto que todas as rotas serão registradas
 // O router é depois exportado e conectado ao servidor principal (geralmente no app.ts ou server.ts)
@@ -35,6 +36,13 @@ router.delete('/produto/:id', ProdutoController.remover);
 router.get('/produto-valor-por-produto', ProdutoController.valorPorProduto);
 router.get('/produto-valor-total-estoque', ProdutoController.valorTotalEstoque);
 router.get('/produto-produtos-para-reposicao', ProdutoController.produtosParaReposicao);
+
+router.get('/movimentacao', MovimentacaoController.todos);
+router.get('/movimentacao/:id', MovimentacaoController.movimentacao);
+router.post('/movimentacao', MovimentacaoController.cadastrar);
+router.put('/movimentacao/:id', (_req: Request, res: Response) => {
+    return res.status(405).json({ mensagem: 'Movimentações confirmadas não podem ser alteradas. Registre uma correção.' });
+});
 
 
 // Exporta o router para que possa ser registrado no servidor principal da aplicação
