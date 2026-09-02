@@ -5,6 +5,7 @@ import { Router, type Request, type Response } from "express";
 import CategoriaController from "./controller/CategoriaController.js";
 import ProdutoController from "./controller/ProdutoController.js";
 import MovimentacaoController from "./controller/MovimentacaoController.js";
+import { Auth } from "./middlewares/Auth.js";
 
 // Cria uma instância do Router — é neste objeto que todas as rotas serão registradas
 // O router é depois exportado e conectado ao servidor principal (geralmente no app.ts ou server.ts)
@@ -23,26 +24,28 @@ router.get('/', (req: Request, res: Response) => {
         .json({ mensagem: "Aplicação online", timestamp: new Date() });
 });
 
-router.get('/categoria', CategoriaController.todos);
-router.get('/categoria/:id', CategoriaController.categoria);
-router.post('/categoria', CategoriaController.cadastrar);
-router.put('/categoria/:id', CategoriaController.atualizar); 
+router.get('/categoria', Auth.verifyToken, CategoriaController.todos);
+router.get('/categoria/:id', Auth.verifyToken, CategoriaController.categoria);
+router.post('/categoria', Auth.verifyToken, CategoriaController.cadastrar);
+router.put('/categoria/:id', Auth.verifyToken, CategoriaController.atualizar); 
 
-router.get('/produto', ProdutoController.todos);
-router.get('/produto/:id', ProdutoController.produto);
-router.post('/produto', ProdutoController.cadastrar);
-router.put('/produto/:id', ProdutoController.atualizar);
-router.delete('/produto/:id', ProdutoController.remover);
-router.get('/produto-valor-por-produto', ProdutoController.valorPorProduto);
-router.get('/produto-valor-total-estoque', ProdutoController.valorTotalEstoque);
-router.get('/produto-produtos-para-reposicao', ProdutoController.produtosParaReposicao);
+router.get('/produto', Auth.verifyToken, ProdutoController.todos);
+router.get('/produto/:id', Auth.verifyToken, ProdutoController.produto);
+router.post('/produto', Auth.verifyToken, ProdutoController.cadastrar);
+router.put('/produto/:id', Auth.verifyToken, ProdutoController.atualizar);
+router.delete('/produto/:id', Auth.verifyToken, ProdutoController.remover);
+router.get('/produto-valor-por-produto', Auth.verifyToken, ProdutoController.valorPorProduto);
+router.get('/produto-valor-total-estoque', Auth.verifyToken, ProdutoController.valorTotalEstoque);
+router.get('/produto-produtos-para-reposicao', Auth.verifyToken, ProdutoController.produtosParaReposicao);
 
-router.get('/movimentacao', MovimentacaoController.todos);
-router.get('/movimentacao/:id', MovimentacaoController.movimentacao);
-router.post('/movimentacao', MovimentacaoController.cadastrar);
-router.put('/movimentacao/:id', (_req: Request, res: Response) => {
+router.get('/movimentacao', Auth.verifyToken, MovimentacaoController.todos);
+router.get('/movimentacao/:id', Auth.verifyToken, MovimentacaoController.movimentacao);
+router.post('/movimentacao', Auth.verifyToken, MovimentacaoController.cadastrar);
+router.put('/movimentacao/:id', Auth.verifyToken, (_req: Request, res: Response) => {
     return res.status(405).json({ mensagem: 'Movimentações confirmadas não podem ser alteradas. Registre uma correção.' });
 });
+
+router.post('/login', Auth.validacaoUsuario);
 
 
 // Exporta o router para que possa ser registrado no servidor principal da aplicação

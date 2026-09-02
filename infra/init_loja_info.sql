@@ -4,10 +4,28 @@ DROP VIEW IF EXISTS vw_produtos_reposicao;
 DROP VIEW IF EXISTS vw_produtos_detalhes;
 DROP VIEW IF EXISTS vw_movimentacoes_detalhes;
 
+DROP TABLE IF EXISTS usuario CASCADE;
 DROP TABLE IF EXISTS movimentacao;
 DROP TABLE IF EXISTS produto;
 DROP TABLE IF EXISTS categoria;
 
+CREATE TABLE usuario (
+    id_usuario INTEGER GENERATED ALWAYS AS IDENTITY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    perfil VARCHAR(20) NOT NULL DEFAULT 'OPERADOR',
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    data_cadastro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT pk_usuario PRIMARY KEY (id_usuario),
+    CONSTRAINT uq_usuario_email UNIQUE (email),
+    
+    -- Restringe os perfis aos papeis do sistema
+    CONSTRAINT ck_usuario_perfil CHECK (
+        perfil IN ('ADMINISTRADOR', 'GERENTE', 'OPERADOR')
+    )
+);
 
 CREATE TABLE categoria (
     id_categoria INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -286,6 +304,26 @@ SELECT
     ) AS valor_total_estoque
 FROM produto AS p;
 
+INSERT INTO usuario (nome, email, senha, perfil)
+VALUES
+    (
+        'Ana Souza',
+        'ana.souza@empresa.com',
+        '$2b$12$CqHXxtiK0S5jikZq2kZJOe0meMrNF.9JVciXJsEJ99VFhrp3VdVXO',
+        'ADMINISTRADOR'
+    ),
+    (
+        'Carlos Oliveira',
+        'carlos.oliveira@empresa.com',
+        '$2b$12$yt4pjcKEJU.vhTvwLk2y7uLRaibBXAVS4tM5wxGdPyM9gyGye.iv.',
+        'GERENTE'
+    ),
+    (
+        'Mariana Lima',
+        'mariana.lima@empresa.com',
+        '$2b$12$ne.Gb9tdjbzQXZRK5iZrHOnaX5DtHEBJ4xNVmTErvnmd8g87219tG',
+        'OPERADOR'
+    );
 
 INSERT INTO categoria (nome)
 VALUES
